@@ -3,6 +3,8 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import customerroutes from './routes/customerroutes.js';
+import orderroutes from './routes/orderroute.js';
+import inventoryroute from './routes/inventoryroute.js';
 // Load environment variables
 
 dotenv.config(); 
@@ -25,6 +27,8 @@ mongoose.connect(process.env.MONGO_URI, { // Replace with your connection string
 // ... 
 
 app.use('/api/customers', customerroutes);
+app.use('/api/orders', orderroutes);
+app.use('/api/inventory', inventoryroute);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Server running on port ${port}`));

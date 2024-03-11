@@ -2,6 +2,7 @@ import express from 'express';
 import orderModel from '../models/ordermodel.js';
 import userModel from '../models/customermodel.js';
 import inventoryModel from '../models/inventorymodel.js';
+import fetchUser from '../middleware/fetchUser.js';
 
 const app = express();
 app.use(express.json());
@@ -10,6 +11,7 @@ const router = express.Router();
 
 router.post("/addorder", async (req, res) => {
     try {
+        console.log(req.body);
         // Create a new order document
         const newOrder = await orderModel.create({
             customerId: req.body.customerId, 
@@ -25,7 +27,7 @@ router.post("/addorder", async (req, res) => {
         const customer = await userModel.findById(req.body.customerId);
 
         // Update inventory
-        await Promise.all(req.body.orderItems.map(async (item) => {
+        await Promise.all(req.body.items.map(async (item) => {
             const inventoryItem = await inventoryModel.findById(item.itemId);
             inventoryItem.quantity -= item.quantity;
             await inventoryItem.save();
@@ -116,3 +118,4 @@ router.put('/updateorder/:id', fetchUser, async (req, res) => {
     }
 });
 
+export default router;
